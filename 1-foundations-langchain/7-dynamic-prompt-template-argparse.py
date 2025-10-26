@@ -6,10 +6,6 @@ from langchain_core.prompts import ChatPromptTemplate
 import argparse
   # take environment variables from .env
 
-
-
-
-
 load_dotenv()
 args = argparse.ArgumentParser(description="Dynamic Prompt Template with Argparse")
 args.add_argument("--topic", type=str, required=True, help="Topic of the explainer")
