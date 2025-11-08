@@ -4,3 +4,9 @@ conda activate ./my_env
 pip install -r requirements.txt
 
 https://aistudio.google.com/api-keys
+
+```python
+print("hello world")
+line1
+line2
+```

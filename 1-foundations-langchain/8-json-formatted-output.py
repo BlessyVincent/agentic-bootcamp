@@ -33,8 +33,8 @@ llm_gemini = ChatGoogleGenerativeAI(model="gemini-2.5-flash",
 parser = PydanticOutputParser(pydantic_object=ProductInfo)
 format_instructions = parser.get_format_instructions()
 
-print("Format Instructions:")
-print(format_instructions)
+# print("Format Instructions:")
+# print(format_instructions)
 
 
 prompt = ChatPromptTemplate.from_messages(
@@ -73,6 +73,8 @@ for attempt in range(parsed_args.max_retries + 1):
     if attempt ==0:
         # first attempt : vanilla invoke
         prompt_prepared = prompt.format(**variables)
+        print("\nPrepared Prompt for Gemini: in attempt 1")
+        print(prompt_prepared)
     else:
         # retry with error hint appended to user message
         retry_prompt = ChatPromptTemplate.from_messages(
@@ -98,7 +100,13 @@ for attempt in range(parsed_args.max_retries + 1):
         _ = json.loads(content)  # quick check for valid JSON
     
     except Exception as e_json:
-        raise ValueError(f"Failed to parse JSON: {e_json}")
+        last_error_hint = f"JSON Parsing Error: {str(e_json)}"
+        print(f"Validation failed: {last_error_hint}")
+        if attempt == parsed_args.max_retries:
+            print("Max retries reached. Exiting.")
+            break
+        else:
+            continue  # retry
     
     product: ProductInfo = parser.parse(content)
 
